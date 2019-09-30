@@ -1,0 +1,264 @@
+<!--
+
+    Copyright (C) 2009-2014 SAP SE or an SAP affiliate company. All rights reserved
+
+-->
+<core:View xmlns:core="sap.ui.core" xmlns="sap.m" xmlns:mvc="sap.ui.core.mvc"
+    xmlns:sap.ui.layout.form="sap.ui.layout.form"
+	xmlns:sap.ui.layout="sap.ui.layout" xmlns:sap.ui.core.mvc="sap.ui.core.mvc"
+	xmlns:sap.ui.core="sap.ui.core" controllerName="ui.s2p.srm.sc.approve.view.itemDetail">
+	<Page showNavButton="true" id="itemHeader" navButtonTap="_navBack">
+		<content>
+			<ObjectHeader id="DetailItemHeader" title="{itemDetailData>/Description}"
+				number="{parts:[{path:'itemDetailData>/Value'}],
+				formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatCurrencyValue'}"
+				numberUnit="{itemDetailData>/Currency}" titleActive="false">
+				<firstStatus>
+					<ObjectStatus id="approveRejectIcon"></ObjectStatus>
+				</firstStatus> 
+				<attributes>
+					<ObjectAttribute
+						text="{parts:[{path:'itemDetailData>/Quantity'},{path:'itemDetailData>/UnitText'}], formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatQuantity'}"></ObjectAttribute>
+					<ObjectAttribute
+						text="{parts:[{path:'itemDetailData>/Price'},{path:'itemDetailData>/Currency'},{path:'itemDetailData>/PriceUnit'},{path:'itemDetailData>/UnitText'},{path:'itemDetailData>/LimitValue'},{path:'itemDetailData>/HaveUnlimitedValue'}],
+						formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatPrice'}"></ObjectAttribute>
+						
+						<!-- extension point for attributes -->
+
+							<core:ExtensionPoint name="extMoreInfo2"></core:ExtensionPoint>
+				</attributes>
+			</ObjectHeader>
+
+			<sap.ui.layout.form:SimpleForm id="infoForm"
+				minWidth="1024" editable="false">
+				<sap.ui.layout.form:content>
+					<sap.ui.core:Title text="{i18n>ITEM_HEADER}"></sap.ui.core:Title>
+
+					<Label id="categoryName"
+						text="{path:'itemDetailData>/ItemType', formatter : 'ui.s2p.srm.sc.approve.util.Formatter.formatCatName'}"
+						visible="{path:'itemDetailData>/Description', formatter:'ui.s2p.srm.sc.approve.util.Formatter.showElementOnUi'}">
+						<layoutData>
+							<sap.ui.layout:ResponsiveFlowLayoutData
+								minWidth="192" weight="3"></sap.ui.layout:ResponsiveFlowLayoutData>
+						</layoutData>
+					</Label>
+					<Text id="categoryNameText" text="{itemDetailData>/Description}"
+						visible="{path:'itemDetailData>/Description', formatter:'ui.s2p.srm.sc.approve.util.Formatter.showElementOnUi'}"
+						maxLines="0">
+						<layoutData>
+							<sap.ui.layout:ResponsiveFlowLayoutData
+								weight="5"></sap.ui.layout:ResponsiveFlowLayoutData>
+						</layoutData>
+					</Text>
+
+					<Label id="categoryType"
+						text="{path:'itemDetailData>/ItemType', formatter : 'ui.s2p.srm.sc.approve.util.Formatter.formatCatType'}"
+						visible="{path:'itemDetailData>/CategoryDescription', formatter:'ui.s2p.srm.sc.approve.util.Formatter.showElementOnUi'}">
+						<layoutData>
+							<sap.ui.layout:ResponsiveFlowLayoutData
+								minWidth="192" weight="3"></sap.ui.layout:ResponsiveFlowLayoutData>
+						</layoutData>
+					</Label>
+					<Text id="categoryTypeText"
+						visible="{path:'itemDetailData>/CategoryDescription', formatter:'ui.s2p.srm.sc.approve.util.Formatter.showElementOnUi'}"
+						text="{parts:[{path:'itemDetailData>/CategoryDescription'},{path:'itemDetailData>/CategoryNumber'}], formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatCategory'}"
+						maxLines="0">
+						<layoutData>
+							<sap.ui.layout:ResponsiveFlowLayoutData
+								weight="5"></sap.ui.layout:ResponsiveFlowLayoutData>
+						</layoutData>
+					</Text>
+
+					<Label id="supplier" text="{i18n>SUPPLIER}"
+						visible="{path:'itemDetailData>/VendorName', formatter:'ui.s2p.srm.sc.approve.util.Formatter.showElementOnUi'}">
+						<layoutData>
+							<sap.ui.layout:ResponsiveFlowLayoutData
+								minWidth="192" weight="3"></sap.ui.layout:ResponsiveFlowLayoutData>
+						</layoutData>
+					</Label>
+					<Text id="supplierText" text="{itemDetailData>/VendorName}"
+						maxLines="0"
+						visible="{path:'itemDetailData>/VendorName', formatter:'ui.s2p.srm.sc.approve.util.Formatter.showElementOnUi'}">
+						<layoutData>
+							<sap.ui.layout:ResponsiveFlowLayoutData
+								weight="5"></sap.ui.layout:ResponsiveFlowLayoutData>
+						</layoutData>
+					</Text>
+					
+					
+					<!-- Delivery details -->
+					<Label text="{i18n>DELIVERY_DATE}" id="delivery">
+						<layoutData>
+							<sap.ui.layout:ResponsiveFlowLayoutData
+								minWidth="192" weight="3"></sap.ui.layout:ResponsiveFlowLayoutData>
+						</layoutData>
+					</Label>
+					<Text text="{parts : [{path:'itemDetailData>/DeliveryDate'},{path:'itemDetailData>/DeliveryPeriodFrom'},
+										{path:'itemDetailData>/DeliveryPeriodTo'}],
+										formatter:'ui.s2p.srm.sc.approve.util.Formatter.showDeliveryDateHeader'}"
+						id="addressTxt" maxLines="0">
+						<layoutData>
+							<sap.ui.layout:ResponsiveFlowLayoutData
+								weight="5"></sap.ui.layout:ResponsiveFlowLayoutData>
+						</layoutData>
+					</Text>
+					
+					<Label text="{i18n>DELIVERY_ADDRESS}" id="address"
+						visible="{path:'itemDetailData>/DeliveryAddress/AddressString', formatter:'ui.s2p.srm.sc.approve.util.Formatter.showElementOnUi'}">
+						<layoutData>
+							<sap.ui.layout:ResponsiveFlowLayoutData
+								minWidth="192" weight="3"></sap.ui.layout:ResponsiveFlowLayoutData>
+						</layoutData>
+					</Label>
+					<Text text="{itemDetailData>/DeliveryAddress/AddressString}"
+						visible="{path:'itemDetailData>/DeliveryAddress/AddressString', formatter:'ui.s2p.srm.sc.approve.util.Formatter.showElementOnUi'}"
+						id="addressText" maxLines="0">
+						<layoutData>
+							<sap.ui.layout:ResponsiveFlowLayoutData
+								weight="5"></sap.ui.layout:ResponsiveFlowLayoutData>
+						</layoutData>
+					</Text>
+					<Label text="{i18n>VALUE_LIMIT}" id="val"
+						visible="{path:'itemDetailData>/LimitValue', formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatValue'}">
+						<layoutData>
+							<sap.ui.layout:ResponsiveFlowLayoutData
+								minWidth="192" weight="3"></sap.ui.layout:ResponsiveFlowLayoutData>
+						</layoutData>
+					</Label>
+					<Text text="{itemDetailData>/LimitValue}"
+						visible="{path:'itemDetailData>/LimitValue', formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatValue'}"
+						id="Value" maxLines="0">
+						<layoutData>
+							<sap.ui.layout:ResponsiveFlowLayoutData
+								weight="5"></sap.ui.layout:ResponsiveFlowLayoutData>
+						</layoutData>
+					</Text>
+						<Label text="{i18n>EXP_VALUE}" id="expval"
+						visible="{path:'itemDetailData>/ExpectedValue', formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatValue'}">
+						<layoutData>
+							<sap.ui.layout:ResponsiveFlowLayoutData
+								minWidth="192" weight="3"></sap.ui.layout:ResponsiveFlowLayoutData>
+						</layoutData>
+					</Label>
+					<Text text="{itemDetailData>/ExpectedValue}"
+						visible="{path:'itemDetailData>/ExpectedValue', formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatValue'}"
+						id="expValue" maxLines="0">
+						<layoutData>
+							<sap.ui.layout:ResponsiveFlowLayoutData
+								weight="5"></sap.ui.layout:ResponsiveFlowLayoutData>
+						</layoutData>
+					</Text>
+					
+					
+					<!-- extension point for attributes -->
+
+							<core:ExtensionPoint name="extMoreInfo3"></core:ExtensionPoint>
+				</sap.ui.layout.form:content>
+			</sap.ui.layout.form:SimpleForm>
+
+			<List id="NotesDetail"
+				items="{itemDetailData>/SCANoteItem/results}"
+				visible="{path:'itemDetailData>/NumberOfNotesItm', formatter :'ui.s2p.srm.sc.approve.util.Formatter.valueVisibilityCheck'}"
+				headerText="{path:'itemDetailData>/SCANoteItem/results/NumberOfNotesItm', formatter :'ui.s2p.srm.sc.approve.util.Formatter.setNoteText'}"
+				mode="SingleSelectMaster" showSeparators="None">
+				<items>
+					<FeedListItem sender="{itemDetailData>CreatedByName}"
+						showIcon="false" senderPress="onNotePersonPress" senderActive="true"
+						text="{itemDetailData>Text}" info="{itemDetailData>TypeDescription}"
+						timestamp="{path:'itemDetailData>CreatedAt',type:'sap.ui.model.type.Date', formatOptions: {style:'medium'}}">
+					</FeedListItem>
+				</items>
+			</List>
+
+			<List id="AttachmentDetailData"
+				items="{itemDetailData>/SCAAttachmentItem/results}"
+				visible="{path:'itemDetailData>/NumberOfAttachmentsItm', formatter :'ui.s2p.srm.sc.approve.util.Formatter.valueVisibilityCheck'}"
+				headerText="{path:'itemDetailData>/NumberOfAttachmentsItm',  formatter :'ui.s2p.srm.sc.approve.util.Formatter.setAttachmentText'}"
+				showSeparators="None">
+				<StandardListItem press="onAttachment" type="Active"
+					title="{itemDetailData>Description}"
+					icon="{path:'itemDetailData>MimeType',formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatAttachmentIcon'}"
+					description="{path:'itemDetailData>FileSize',formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatAttachmentSize'}"
+					iconInset="false">
+				</StandardListItem>
+			</List>
+
+			<sap.ui.layout.form:SimpleForm id="deliveryAddressForm"
+				minWidth="1024" editable="false">
+				<sap.ui.layout.form:content>
+					<!-- extension point for attributes -->
+
+							<core:ExtensionPoint name="extMoreInfo4"></core:ExtensionPoint>
+				</sap.ui.layout.form:content>
+			</sap.ui.layout.form:SimpleForm>
+			
+			<Table id="tableHeader" items="{itemDetailData>/SCAAccounting/results}"
+				visible="{path:'itemDetailData>/SCAAccounting/results', formatter :'ui.s2p.srm.sc.approve.util.Formatter.arrayVisibilityCheck'}"
+				headerText="{path:'itemDetailData>/SCAAccounting/results', formatter:'ui.s2p.srm.sc.approve.util.Formatter.setAccountAssignmentText'}">
+				<columns>
+					<Column hAlign="Left" minScreenWidth="tablet" demandPopin="true">
+						<header>
+							<Label text="{i18n>DESCRIPTION}" textAlign="Left"></Label>
+						</header>
+					</Column>
+					<Column hAlign="Left" minScreenWidth="tablet" demandPopin="true">
+						<header>
+							<Label text="{i18n>CATEGORY}" textAlign="Left"></Label>
+						</header>
+					</Column>
+					<Column hAlign="Left" minScreenWidth="tablet" demandPopin="true">
+						<header>
+							<Label id="GL_ACC" text="{i18n>GL_ACC}" textAlign="Left"></Label>
+						</header>
+					</Column>
+					<Column hAlign="Left" minScreenWidth="tablet" demandPopin="true">
+						<header>
+							<Label id="SHARE" text="{i18n>SHARE}" textAlign="Left"></Label>
+						</header>
+					</Column>
+					<!-- extension point for attributes -->
+
+							<core:ExtensionPoint name="extMoreInfo5"></core:ExtensionPoint>
+				</columns>
+				<items>
+					<ColumnListItem  unread="true" counter="0"
+						id="itemListDetail">
+						<cells id="itemList">
+							<ObjectIdentifier id="ob1"
+								title="{parts:[{path:'itemDetailData>AccountDescription'},{path:'itemDetailData>AccountNumber'}], formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatCategory'}"></ObjectIdentifier>
+							<Text id="ob2"
+								text="{itemDetailData>AccountCategoryDescription}"/>
+							<Text id="ob3"
+								text="{parts:[{path:'itemDetailData>GlAccountDescription'},{path:'itemDetailData>GlAccountNumber'}],formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatCategory'}"/>
+							<ObjectNumber id="ob4"
+								number="{path:'itemDetailData>DistributionPercentage',
+									formatter : 'ui.s2p.srm.sc.approve.util.Formatter.formatPercentages'}">
+							</ObjectNumber>
+							<!-- <ObjectIdentifier id="ob5"></ObjectIdentifier> -->
+							
+							<!--  extension point for attributes -->
+
+							<core:ExtensionPoint name="extMoreInfo6"></core:ExtensionPoint>
+							
+						</cells>
+					</ColumnListItem>
+				</items>
+			</Table>
+
+			<List id="Approval_list" items="{itemDetailData>/SCAApproverItem/results}"
+				mode="SingleSelectMaster" showSeparators="None"
+				headerText="{path:'itemDetailData>/SCAApproverItem/results',formatter :'ui.s2p.srm.sc.approve.util.Formatter.setApproverText'}"
+				visible="{path:'itemDetailData>/SCAApproverItem/results', formatter:'ui.s2p.srm.sc.approve.util.Formatter.arrayVisibilityCheck'}">
+				<items>
+					<FeedListItem sender="{path:'itemDetailData>ApproverFullName'}"
+						id="approverDet" iconActive="false" senderActive="true"
+						icon="{path : 'itemDetailData>ApproverID', formatter: '.formatEmployee'}"
+						iconPress="onApproverPress" senderPress="onApproverPress"
+						text="{itemDetailData>ApprovalStatus}">
+					</FeedListItem>
+				</items>
+			</List>
+
+		</content>
+	</Page>
+</core:View>

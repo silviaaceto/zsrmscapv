@@ -1,0 +1,43 @@
+{
+	"_version": "1.0.0",
+	"sap.app": {
+		"_version": "1.0.0",
+		"id": "ui.s2p.srm.sc.approve",
+		"type": "application",
+		"applicationVersion": {
+			"version": "1.6.78"
+		},
+		"ach": "SRM-FIO-SHP",
+		"resources": "resources.json",
+		"dataSources": {
+			"CARTAPPROVAL": {
+				"uri": "/sap/opu/odata/GBSRM/CARTAPPROVAL;v=2;mo/",
+				"settings": {}
+			},
+			"CARTAPPROVAL_STANDARD": {
+				"uri": "/sap/opu/odata/GBSRM/CARTAPPROVAL;v=2;o=",
+				"settings": {}
+			}
+		}
+	},
+	"sap.ui": {
+		"_version": "1.0.0",
+		"technology": "UI5"
+	},
+	"sap.ui5": {
+		"_version": "1.0.0",
+		"dependencies": {
+			"minUI5Version": "1.28.5",
+			"libs": {
+				"sap.m": {},
+				"sap.me": {},
+				"sap.ca.scfld.md": {}
+			},
+			"components": {}
+		}
+	},
+	"sap.platform.hcp": {
+		"uri": "",
+		"_version": "1.1.0"
+	}
+}
