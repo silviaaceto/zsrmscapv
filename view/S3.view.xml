@@ -1,0 +1,232 @@
+<!--
+
+    Copyright (C) 2009-2014 SAP SE or an SAP affiliate company. All rights reserved
+
+-->
+<core:View xmlns:core="sap.ui.core" 
+	 xmlns:sap.ui.layout="sap.ui.layout"
+	 xmlns:sap.ui.layout.form="sap.ui.layout.form"
+	xmlns:sap.ui.core.mvc="sap.ui.core.mvc" xmlns="sap.m"
+	controllerName="ui.s2p.srm.sc.approve.view.S3">
+	<Page title="{i18n>DETAIL_TITLE}" class="sapUiFioriObjectPage" showNavButton="{device>/showNavButton}" navButtonPress="_navBack">
+		<content>
+
+			<ObjectHeader id="DetailHeader" title="{description>/CreatedByName}" titleActive="true"
+				titlePress="onCreatorPress" number="{path:'description>/Value',formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatCurrencyValue'}"
+				numberUnit="{description>/Currency}">
+				<firstStatus>
+					<ObjectStatus
+						text="{path: 'description>/WiCreatedAt', formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatDaysAgo'}"></ObjectStatus>
+				</firstStatus>
+				<attributes>
+					<ObjectAttribute id="ATTR2" press="onPersonNamePress"
+						active="true"
+						text="{parts: [{path: 'description>/ForwardedByName'}, {path:'description>/OnBehalfOfName'}, {path: 'description>/SubstitutingForName'}], formatter: 'ui.s2p.srm.sc.approve.util.Formatter.formatTextAuthor'}" />
+				</attributes>
+			</ObjectHeader>
+
+			<IconTabBar id="icontabBar" expandable="true" expanded="true" select="formatEmployee"
+				selectedKey="Information">
+				<items>
+					<IconTabFilter icon="sap-icon://hint" iconColor="Default"
+						key="Information" id="info" showAll="false">
+						<content>
+							<sap.ui.layout.form:SimpleForm
+								id="myForm1" minWidth="1024" editable="false">
+								<sap.ui.layout.form:content>
+									<Label text="{i18n>DESCRIPTION}">
+										<layoutData>
+											<sap.ui.layout:ResponsiveFlowLayoutData
+												minWidth="192" weight="3"></sap.ui.layout:ResponsiveFlowLayoutData>
+										</layoutData>
+									</Label>
+									<Text
+										text="{parts:[{path:'description>/ScDescription'},{path:'description>/ScNumberFormatted'}], formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatCategory'}"
+										maxLines="0">
+										<layoutData>
+											<sap.ui.layout:ResponsiveFlowLayoutData
+												weight="5"></sap.ui.layout:ResponsiveFlowLayoutData>
+										</layoutData>
+									</Text>
+
+									<Label
+										text="{path:'description>/HeaderInfo/CumulatedAccountingTypeCode',
+									formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatAccountAssignmentHeader'}"
+										visible="{path:'description>/HeaderInfo/CumulatedAccountingTypeCode',
+									formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatAccountAssignmentIfPresent'}">
+										<layoutData>
+											<sap.ui.layout:ResponsiveFlowLayoutData
+												minWidth="192" weight="3"></sap.ui.layout:ResponsiveFlowLayoutData>
+										</layoutData>
+									</Label>
+
+									<Text id="acc_as_type" maxLines="0"
+										text="{parts : [{path:'description>/HeaderInfo/AccountCategoryDescription'},
+												{path:'description>/HeaderInfo/AccountDescription'},{path:'description>/HeaderInfo/AccountNumber'}], 
+												formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatAccountAssignmentValue'}"
+										visible="{path:'description>/HeaderInfo/CumulatedAccountingTypeCode',
+												formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatAccountAssignmentIfPresent'}">
+										<layoutData>
+											<sap.ui.layout:ResponsiveFlowLayoutData
+												weight="5"></sap.ui.layout:ResponsiveFlowLayoutData>
+										</layoutData>
+									</Text>
+									<Label text="">
+										<layoutData>
+											<sap.ui.layout:ResponsiveFlowLayoutData
+												minWidth="192" weight="3"></sap.ui.layout:ResponsiveFlowLayoutData>
+										</layoutData>
+									</Label>
+									<Text id="glacc_as_type" maxLines="0" 
+										visible="{parts : [{path:'description>/HeaderInfo/AccountCategoryDescription'},
+												 {path:'description>/HeaderInfo/AccountDescription'},{path:'description>/HeaderInfo/AccountNumber'}], 
+												 formatter:'ui.s2p.srm.sc.approve.util.Formatter.glAccountVisibilityCheck'}"																	
+										text = "{parts : [{path:'description>/HeaderInfo/GlAccountDescription'},{path:'description>/HeaderInfo/GlAccountNumberFormatted'}], 
+												formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatGLAccountAssignmentValue'}">										
+										<layoutData>
+											<sap.ui.layout:ResponsiveFlowLayoutData
+												weight="5"></sap.ui.layout:ResponsiveFlowLayoutData>
+										</layoutData>
+									</Text>
+
+									<Label text="{i18n>DELIVERY_DATE}">
+										<layoutData>
+											<sap.ui.layout:ResponsiveFlowLayoutData
+												minWidth="192" weight="3"></sap.ui.layout:ResponsiveFlowLayoutData>
+										</layoutData>
+									</Label>
+									<Text
+										text="{parts : [{path : 'description>/HeaderInfo/DeliveryDate'}, {path : 'description>/HeaderInfo/DeliveryDateAlsoLater'}],
+										 formatter : 'ui.s2p.srm.sc.approve.util.Formatter.deliveryDate'}"
+										maxLines="0">
+										<layoutData>
+											<sap.ui.layout:ResponsiveFlowLayoutData
+												weight="5"></sap.ui.layout:ResponsiveFlowLayoutData>
+										</layoutData>
+									</Text>
+									<!-- extension point for attributes --> 
+
+							<core:ExtensionPoint name="extMoreInfo1"></core:ExtensionPoint>
+								</sap.ui.layout.form:content>
+							</sap.ui.layout.form:SimpleForm>
+						</content>
+					</IconTabFilter>
+
+					<IconTabFilter icon="sap-icon://notes" iconColor="Default"
+						key="note" visible="{path:'description>/SCANoteHeader/results', formatter:'ui.s2p.srm.sc.approve.util.Formatter.arrayVisibilityCheck'}"
+						 id="noteTab" showAll="false"
+						count="{path:'description>/SCANoteHeader/results', formatter:'ui.s2p.srm.sc.approve.util.Formatter.getTotalValue'}">
+						<content>
+							<List id="Notes" items="{description>/SCANoteHeader/results}"
+								mode="SingleSelectMaster" showSeparators="None">
+								<items>
+									<FeedListItem sender="{description>CreatedByName}"
+										id="noteval" showIcon="false" text="{description>Text}"
+										info="{description>TypeDescription}" senderPress="onNotePersonPress"
+										senderActive="true"
+										timestamp="{path:'description>CreatedAt',type:'sap.ui.model.type.Date', formatOptions: {style:'medium'}}">
+									</FeedListItem>
+								</items>
+							</List>
+						</content>
+					</IconTabFilter>
+
+					<IconTabFilter icon="sap-icon://attachment"
+						iconColor="Default" key="attachment" visible="{path:'description>/SCAAttachmentHeader/results', formatter:'ui.s2p.srm.sc.approve.util.Formatter.arrayVisibilityCheck'}"
+						 id="attachTab" 
+						 count="{path:'description>/SCAAttachmentHeader/results', formatter:'ui.s2p.srm.sc.approve.util.Formatter.getTotalValue'}"
+						showAll="false">
+						<content id="Attachment">
+							<List id="AttachmentData" items="{description>/SCAAttachmentHeader/results}"
+
+								visible="false" showSeparators="None">
+								<StandardListItem  type="Active"
+									title="{description>Description}"
+									icon="{path:'description>MimeType',formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatAttachmentIcon'}"
+									description="{path:'description>FileSize',formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatAttachmentSize'}"
+									iconInset="false">
+								</StandardListItem>
+							</List>
+
+						</content>
+					</IconTabFilter>
+
+					<IconTabFilter icon="sap-icon://group" iconColor="Default" expandable="true" expanded="true"
+						key="approver" visible="{path:'description>/SCAApproverHeader/results', formatter:'ui.s2p.srm.sc.approve.util.Formatter.arrayVisibilityCheck' }" id="approveTab" showAll="false"
+						count="{path:'description>/SCAApproverHeader/results', formatter:'ui.s2p.srm.sc.approve.util.Formatter.getTotalValue'}">
+						<content id="Approval">
+							<List id="Approval_list" items="{description>/SCAApproverHeader/results}"
+								mode="SingleSelectMaster" showSeparators="None" inset="false">
+								<items>
+									<FeedListItem sender="{path:'description>ApproverFullName'}"  
+										id="approverDet" iconActive="false" iconPress="onApproverPress"
+										senderPress="onApproverPress" senderActive="true"
+										text="{description>ApprovalStatus}">
+									</FeedListItem>
+								</items>
+							</List>
+						</content>
+					</IconTabFilter>
+				</items>
+			</IconTabBar>
+
+			<Table id="itemList" items="{description>/SCAItem/results}" updateFinished="onItemsLoaded" growing="true" growingScrollToLoad="true" growingThreshold="500"
+				headerText="{ path: 'description>/NumberOfItems', formatter: 'ui.s2p.srm.sc.approve.util.Formatter.formatItemHeader'}">
+				<columns>
+					<Column visible="false" hAlign="Left" minScreenWidth="tablet"
+						demandPopin="true">
+						<header>
+							<Label textAlign="Left" weight="5"></Label>
+						</header>
+					</Column>
+					<Column hAlign="Left">
+						<header>
+							<Label text="{i18n>DESCRIPTION}" textAlign="Left" weight="5"></Label>
+						</header>
+					</Column>
+					<Column hAlign="Left" minScreenWidth="tablet" demandPopin="true">
+						<header>
+							<Label text="{i18n>QUANTITY_LBL}" textAlign="Right" weight="5"></Label>
+						</header>
+					</Column>
+					<Column hAlign="Left" minScreenWidth="tablet" demandPopin="true">
+						<header>
+							<Label id="SCC_SUB_TOTAL" text="{i18n>SUB_TOTAL_HEADER}"
+								textAlign="Right" weight="5"></Label>
+						</header>
+					</Column>
+				</columns>
+				<items>
+					<ColumnListItem press="moveToItemDetail" type="Navigation"
+						unread="true" counter="0" id="itemListDetail">
+						<cells>
+							<Switch id="approve_reject" enables="true" change="onItemApproveChange"
+							 state="true" type="AcceptReject" class="soc-table-elem-align"
+								visible="{path:'description>ApprovalOnItemlevel',
+						    	  formatter :'ui.s2p.srm.sc.approve.util.Formatter.switchVisible' }"></Switch>
+						    
+							<ObjectIdentifier title="{description>Description}" 
+								badgeNotes="{path : 'description>NumberOfNotesItm',
+							   formatter : 'ui.s2p.srm.sc.approve.util.Formatter.badgeVisible'}"
+								badgeAttachments="{path : 'description>NumberOfAttachmentsItm',
+							   formatter : 'ui.s2p.srm.sc.approve.util.Formatter.badgeVisible'}"></ObjectIdentifier>
+
+							<ObjectNumber id="quantity" 
+								number="{path:'description>Quantity', formatter:'ui.s2p.srm.sc.approve.util.Formatter.getQuantity'}"
+								numberUnit="{description>UnitText}"></ObjectNumber>
+								
+							<ObjectNumber 
+								number="{path:'description>Value',formatter :'ui.s2p.srm.sc.approve.util.Formatter.formatCurrencyValue'}" numberUnit="{description>Currency}"></ObjectNumber>
+						</cells>
+					</ColumnListItem>
+
+				</items>
+			</Table>
+		</content>
+		<footer>
+			<Bar id="detailFooter">
+			</Bar>
+		</footer>
+	</Page>
+
+</core:View>

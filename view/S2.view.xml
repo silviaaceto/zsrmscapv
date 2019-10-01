@@ -1,0 +1,35 @@
+<!--
+
+    Copyright (C) 2009-2014 SAP SE or an SAP affiliate company. All rights reserved
+
+-->
+<core:View xmlns:core="sap.ui.core"
+	xmlns="sap.m" controllerName="ui.s2p.srm.sc.approve.view.S2">
+	<Page id="listpage" title="{i18n>MASTER_TITLE}">
+		<content>
+			<List id="list" items="{/WorkflowTaskCollection}" mode="{device>/listMode}" select="_handleSelect" growing="true" growingScrollToLoad="true" growingThreshold="20">			
+				<ObjectListItem  id="MAIN_LIST_ITEM" type="{device>/listItemType}" press="_handleItemPress"
+					title="{CreatedByName}"
+                    number="{parts:[{path:'Value'}],formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatCurrencyValue'}"
+                    numberUnit="{Currency}">
+                    <firstStatus>
+                     	<ObjectStatus text="{path:'WiCreatedAt', formatter:'ui.s2p.srm.sc.approve.util.Formatter.formatDaysAgo'}"> 
+                    	</ObjectStatus>
+                    </firstStatus>
+					<attributes>
+						<ObjectAttribute id="ATTR1" text="{ItemDescriptions}" />
+						<ObjectAttribute id="ATTR2" text="{parts: [{path: 'ForwardedByName'}, {path:'OnBehalfOfName'}, {path: 'SubstitutingForName'}], formatter: 'ui.s2p.srm.sc.approve.util.Formatter.formatTextAuthor'}" />						
+					<!-- extension point for attributes --> 
+
+						<core:ExtensionPoint name="extMoreAttr"></core:ExtensionPoint>
+
+					
+					</attributes>
+				</ObjectListItem>				
+			</List>
+		</content>
+		<footer>
+			<Bar id="footer"></Bar>
+		</footer>
+	</Page>
+</core:View>

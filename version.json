@@ -1,0 +1,8 @@
+{ "application" : "ui.s2p.srm.sc.approve",
+  "version" : "1.6.78",
+  "buildNumber" : "2",
+  "buildId" : "2",
+  "branch" : "origin/rel-1.6",
+  "revision" : "37f490c79ae1b4dfbe2c78454b91d1cf26f9e9bc",
+  "GitURL" : ""
+}
